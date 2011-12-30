@@ -1,0 +1,2 @@
+rackspaceUser = ""
+rackspaceAPI = ""

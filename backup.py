@@ -4,13 +4,14 @@ import sys
 import time
 import tarfile
 import os
+import config
 
 from datetime import date, datetime
 
 # Modify the variables below to match your environment
 
 # Desired log location
-logFile = "/var/log/backup"
+logFile = config.logFile
 
 # Rackspace Cloud Files settings
 rackspaceUser = ""
