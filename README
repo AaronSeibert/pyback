@@ -1,3 +1,7 @@
+This backup script, at the moment, only backs up to Rackspace Cloud.
+
 To use this script, you must also have downloaded and installed the Cloudfiles API hooks for Rackspace.  These can be found at:
 
 https://github.com/rackspace/python-cloudfiles/tree
+
+Be sure to edit the first 40 lines to your preference.  These will eventually be pulled out to a seperate config file, which will also allow the use of different backup destinations.
