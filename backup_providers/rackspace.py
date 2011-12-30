@@ -1,2 +1,0 @@
-rackspaceUser = ""
-rackspaceAPI = ""
