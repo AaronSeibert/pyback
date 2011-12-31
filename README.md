@@ -9,9 +9,11 @@ Then, check the Documentation folder for requirements pertaining to each of the 
 
 Then, simply call backup.py with the type of backup to perform:
 
+```bash
 backup.py Daily
 backup.py Weekly
 backup.py Monthly
+```
 
 ## Adding backup providers
 New backup destination providers can be added by creating an appropriately named class in the "backup_providers" folder.  Classes *must* contain the following methods, other than the standard __init__:
