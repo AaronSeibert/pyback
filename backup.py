@@ -6,6 +6,7 @@ import os
 import config
 
 from datetime import date, datetime
+from provider import processProviders as provider
 
 backupName = date.today();
 
@@ -21,6 +22,8 @@ def logWrite(string):
 	log.write(currentTime() + ": " + string + "\n")
 	log.close()
 	return	
+
+"""
 
 # Python's tarfile exclusion function
 def tarExclude(filename):
@@ -52,9 +55,13 @@ for item in backupSrc:
 	tar.add(item,exclude=tarExclude)
 tar.close()
 
-# Push file to backup destination
-status = pushBackup(backupName,backupFile)
+"""
 
+# Push file to backup destination
+pushStatus = provider(backupType, "temp.tgz", "")
+
+print pushStatus
+"""
 
 # Check for old backups and rotate as necessary
 if status == "Ok":
@@ -69,3 +76,5 @@ os.remove(dbBackupFile)
 
 logWrite("Backup process complete.")
 logWrite("********** END OF LOG **********\n\n")
+
+"""
