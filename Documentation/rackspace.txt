@@ -1,0 +1,7 @@
+Rackspace Backup Provider requirements
+======================================
+
+To use this provider, you must also have downloaded and installed the Cloudfiles API hooks for Rackspace.  These can be found at:
+
+https://github.com/rackspace/python-cloudfiles/tree
+
