@@ -43,6 +43,46 @@ class Rackspace:
 			self.cont.get_object(self.backup_type)
 		except cloudfiles.errors.NoSuchObject:
 			# If the backup "folder" doesn't exist, create it
-			self.log += "Folder " + self.backup_type + " does nto exist.\n"
+			self.log += "Folder " + self.backup_type + " does not exist.\n"
 			self.createSubFolder(self.backup_type)
-			
+
+	def pushBackup(self, backup_name, backup_file):
+		try:
+			# Create the backup name to work with the RS Cloud pseudo-directory
+			self.backup_name = self.backup_type + "/" + backup_name
+		
+			self.log += "Creating object for backup file\n"
+			rsFile = self.cont.create_object(self.backup_name)
+		
+			# Upload the backup file to remote storage
+			rsFile.write("")
+			# rsFile.load_from_filename(backup_file)
+			return "Ok"
+		except:
+			self.log += "There was an error creating the remote backup.\n"
+			self.log += "Backup file is located at " + backup_file + "\n"
+			self.log += "Please move the backup manually\n"
+			return "Error"
+	
+	def rotateBackup (self, maxFiles):
+		# Get the current number of objects for this bckup type
+		self.log += "Checking for old backups\n"
+		priorBackups = self.cont.get_objects(path=self.backup_type)
+		currentBackups = len(priorBackups)
+
+		if currentBackups <= maxFiles:
+			self.log += "Number of backups (" + str(currentBackups) + ") has not reached the maximume threshold (" + str(maxFiles) + "). Will not remove previous backups.\n"
+		else:
+			while currentBackups > maxFiles:
+				# Obtain the list of files and store as an array
+				files = self.cont.get_objects(path=self.backup_type)
+				
+				# Set the filename to be the first file returned.  Since we're using date-formatted filenames, this works.  Other naming schemes will require adjustment here.
+				filename = files[0]
+				filename = str(filename)
+				self.log += "Deleting " + filename + "\n"
+				
+				# Delete the object
+				self.cont.delete_object(filename)
+				currentBackups -= 1
+	

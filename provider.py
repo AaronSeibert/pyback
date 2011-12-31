@@ -13,6 +13,8 @@ def processBackup(Provider, backup_type):
 	import platform
 	hostname = platform.node()
 	Provider.checkLocation(hostname, backup_type)
+	Provider.pushBackup("test.tgz","")
+	Provider.rotateBackup(config.maxFiles[backup_type])
 	print Provider.log
 
 if __name__ == "__main__":

@@ -27,31 +27,8 @@ def tarExclude(filename):
 	for item in backupExclude:
 		return filename == item
 
-# Deletes opbjects in the RS Cloud container
-def delFiles(filename,cont):
-	logWrite("Deleting " + filename)
-	cont.delete_object(filename)
-	return
-
-# Stores the backup file
-def pushBackup(backupName,backupFile):
-	try:	
-		# Push file to RS Cloud
-		logWrite("Creating RS Cloud object.")
-		rsFile = cont.create_object(backupName)
-		logWrite("Uploading backup file.")
-		rsFile.load_from_filename(backupFile)
-		return "Ok"
-	except:
-		logWrite("There was an error pushing the backup.")
-		return
-
-
 logWrite("********** START OF LOG **********")
 logWrite("Backup process started.")
-
-# Sets the container to use for the backup
-cont = checkContainer(backupType)
 
 # Set the SQL Backup path, and dump the backup
 dbBackupFile = tmpPath + "/" + str(backupName) + ".sql"
@@ -81,28 +58,9 @@ status = pushBackup(backupName,backupFile)
 
 # Check for old backups and rotate as necessary
 if status == "Ok":
-	logWrite("Checking for old backups.")
-
-	files = cont.list_objects()
-	numFiles = len(files)
-
-	if numFiles <= maxFiles[backupType]:
-		logWrite("Number of backups (" + numFiles + ")has not reached threshold of " + maxFiles[backupType] + ".  Will not remove previous backups.")
-	else:
-		while numFiles > maxFiles[backupType]:
-			files = cont.list_objects()
-			filename = files[0]
-			delFiles(filename,cont)
-			numFiles -= 1
-
 	# delete backup files
 	logWrite("Deleting temporary backup file.")
 	os.remove(backupFile)
-else:
-	logWrite("There was a problem pushing the backup.")
-	logWrite("Backup file located at " + backupFile)
-	logWrite("Please move manually.")
-
 
 # Delete the DB Backup file.  Since this is added to the archive, no need to keep it if the archive
 # copy fails.
