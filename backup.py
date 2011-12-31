@@ -1,5 +1,4 @@
 #!/usr/bin/python
-import cloudfiles
 import sys
 import time
 import tarfile
@@ -8,47 +7,10 @@ import config
 
 from datetime import date, datetime
 
-# Modify the variables below to match your environment
-
-# Desired log location
-logFile = config.logFile
-
-# Rackspace Cloud Files settings
-rackspaceUser = ""
-rackspaceAPI = ""
-
-# Database Settings
-dbUser = "" # Database User name
-dbPass = "" # Database Password
-dbHost = "" # Database Host
-
-# Filesystem backup settings
-tmpPath = "/tmp"
-backupSrc = [
-	"/home",
-	"/etc"
-	]
-backupExclude = [
-	"/etc/dropbox"
-	]
-
-# Number of backup files to keep
-
-maxFiles = {
-	'Daily':7,
-	'Weekly':4,
-	'Monthly':6
-	}
-	
-# DO NOT MODIFY BELOW THIS LINE
-
 backupName = date.today();
 
 # Set the backup type
 backupType = sys.argv[1]
-
-# Initiate the connection to RSCloudFiles
-conn = cloudfiles.get_connection(rackspaceUser, rackspaceAPI)
 
 def currentTime():
 	time = datetime.now()
@@ -59,19 +21,6 @@ def logWrite(string):
 	log.write(currentTime() + ": " + string + "\n")
 	log.close()
 	return	
-
-# Checks to verify the backup container exists.  If it does not, creates it.
-# Note - This is tailored to RS Cloud.  Could easily be tailored to a mounted FS as well
-def checkContainer(container):
-	try:
-		cont = conn.get_container(container)
-		logWrite("Using " + cont.name)
-		return cont
-	except:
-		logWrite(container + " does not exist.  Creating...")
-		cont = conn.create_container(container)
-		logWrite(container + " created.")
-		return cont
 
 # Python's tarfile exclusion function
 def tarExclude(filename):
