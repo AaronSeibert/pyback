@@ -7,12 +7,12 @@ def checkProviders():
 	if config.bpRackspace == True:
 		import backup_providers.rackspace
 		Provider = backup_providers.rackspace.Rackspace(config.bpRackspaceUser, config.bpRackspaceAPI)
-		processBackup(Provider)
+		processBackup(Provider, "Daily")
 
-def processBackup(Provider):
+def processBackup(Provider, backup_type):
 	import platform
 	hostname = platform.node()
-	Provider.checkLocation(hostname)
+	Provider.checkLocation(hostname, backup_type)
 	print Provider.log
 
 if __name__ == "__main__":
