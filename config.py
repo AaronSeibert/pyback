@@ -18,10 +18,12 @@ maxFiles = {
 #########################################################################################
 
 # fsBackup - choose to enable (True) or disable (False) the filesystem backup
+# fsType - the type of backup to use.  Currently gzip is the only supported method
 # fsBackupTmpPath - path to temporary storage of the backups
 # fsBackupSrc - array of directories to back up
 # fsBackupExclude = array of directories to exclude from backup
-fsBackup = True
+fsBackup = False
+fsType = "gzip"
 fsBackupTmpPath = "/tmp"
 fsBackupSrc = [
 	"/home",
@@ -31,14 +33,19 @@ fsBackupExclude = [
 	"/etc/dropbox"
 	]
 
-# dbMysql - choose to enable (True) or disable (False) the MySQL backup
+# sqlBackup - choose to enable (True) or disable (False) the sql backup
+# sqlType - Set the sql server type, done as a multi-dimensional array (list of lists)
+#  backend - sql backend type.  Currently only supports mysql
+#  user - sql username
+#  pass - sql password
+#  host - sql host
 # dbMysqlUser - the MySQL user account that has access to the databases you wish to backup
 # dbMysqlPass - dbMysqlUser's password
 # dbMysqlHost - host of the MySQL server.
-dbMysql = True
-dbMysqlUser = ""
-dbMysqlPass = ""
-dbMysqlHost = ""
+sqlBackup = False
+sqlServers = [
+	["backend","user","pass","host"],
+	]
 
 #########################################################################################
 #
