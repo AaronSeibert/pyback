@@ -3,6 +3,9 @@
 #Set the log file directory
 logFile = "/var/log/backup"
 
+# Set the temporary file directory
+tmpDir = "/tmp"
+
 # Set the number of backup files to keep for each backup type as an associative array
 maxFiles = {
 	'Daily':7,
@@ -24,7 +27,6 @@ maxFiles = {
 # fsBackupExclude = array of directories to exclude from backup
 fsBackup = False
 fsType = "gzip"
-fsBackupTmpPath = "/tmp"
 fsBackupSrc = [
 	"/home",
 	"/etc"
