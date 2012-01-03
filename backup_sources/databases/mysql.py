@@ -8,6 +8,6 @@ class sql:
 		self.db_pass = db_pass
 		self.db_host = db_host
 
-	def obtainBackup(self, tmp_path, file_name):
-		dbBackupFile = tmp_path + "/" + file_name + ".sql"
+	def obtainBackup(self, dbBackupFile):
 		os.popen("mysqldump -h " + self.db_host + " --user=\"" + self.db_user + "\" --password=\"" + self.db_pass + "\" --all-databases > " + dbBackupFile)
+		print "mysqldump -h " + self.db_host + " --user=\"" + self.db_user + "\" --password=\"" + self.db_pass + "\" --all-databases > " + dbBackupFile
