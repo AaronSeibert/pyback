@@ -47,6 +47,7 @@ class Rackspace:
 			self.createSubFolder(self.backup_type)
 
 	def pushBackup(self, backup_name, backup_file):
+		backup_file += "/" + backup_name
 		try:
 			# Create the backup name to work with the RS Cloud pseudo-directory
 			self.backup_name = self.backup_type + "/" + backup_name
@@ -55,8 +56,7 @@ class Rackspace:
 			rsFile = self.cont.create_object(self.backup_name)
 		
 			# Upload the backup file to remote storage
-			rsFile.write("")
-			# rsFile.load_from_filename(backup_file)
+			rsFile.load_from_filename(backup_file)
 			return "Ok"
 		except:
 			self.log += "There was an error creating the remote backup.\n"

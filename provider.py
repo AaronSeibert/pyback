@@ -8,19 +8,38 @@ def processProviders(backup_type, backup_name, backup_path):
 	if config.bpRackspace == True:
 		import backup_providers.rackspace
 		Provider = backup_providers.rackspace.Rackspace(config.bpRackspaceUser, config.bpRackspaceAPI)
-		log += processBackup(Provider, backup_type, backup_name, backup_path)
+		status = processBackup(Provider, backup_type, backup_name, backup_path, log)
 	else:
 		# If there are no valid backup destinations, raise exception
 		raise Exception("No valid backup destination providers.")
-	return log
+	return status
 
-def processBackup(Provider, backup_type, backup_name, backup_path):
+def processBackup(Provider, backup_type, backup_name, backup_path, log):
 	import platform
 	hostname = platform.node()
-	Provider.checkLocation(hostname, backup_type)
-	Provider.pushBackup(backup_name, backup_path)
-	Provider.rotateBackup(config.maxFiles[backup_type])
-	return Provider.log
+	try:
+		
+		# First we check to make sure the remote location exists.
+		Provider.checkLocation(hostname, backup_type)
+		
+		# Then push the backup to the remote location
+		Provider.pushBackup(backup_name, backup_path)
+		
+		# Then rotate
+		Provider.rotateBackup(config.maxFiles[backup_type])
+		
+		# Obtain the provider log file
+		log = Provider.log
+		
+		return {
+			'log':log,
+			'status':True
+		}
+	except:
+		return {
+			'log':log,
+			'status':False
+			}
 
 if __name__ == "__main__":
     processProviders("Weekly", "temp.tgz", "")
