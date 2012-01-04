@@ -46,7 +46,7 @@ fsBackupExclude = [
 # dbMysqlHost - host of the MySQL server.
 sqlBackup = True
 sqlServers = [
-	["","","",""],
+	["backend","user","pass","host"],
 	]
 
 #########################################################################################
