@@ -25,14 +25,14 @@ maxFiles = {
 # fsBackupTmpPath - path to temporary storage of the backups
 # fsBackupSrc - array of directories to back up
 # fsBackupExclude = array of directories to exclude from backup
-fsBackup = False
+fsBackup = True
 fsType = "gzip"
 fsBackupSrc = [
 	"/home",
 	"/etc"
 	]
 fsBackupExclude = [
-	"/etc/dropbox"
+	"/home/aaron"
 	]
 
 # sqlBackup - choose to enable (True) or disable (False) the sql backup
@@ -44,9 +44,9 @@ fsBackupExclude = [
 # dbMysqlUser - the MySQL user account that has access to the databases you wish to backup
 # dbMysqlPass - dbMysqlUser's password
 # dbMysqlHost - host of the MySQL server.
-sqlBackup = False
+sqlBackup = True
 sqlServers = [
-	["backend","user","pass","host"],
+	["","","",""],
 	]
 
 #########################################################################################

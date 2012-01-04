@@ -1,12 +1,13 @@
 #!/usr/bin/python
 import sys
 import os
-import tarfile
 import config
+import shutil
 
 from datetime import date, datetime
 from provider import processProviders as provider
 from sql import processSql as sql
+from filesystem import processFS as fs
 
 backupName = str(date.today());
 sqlTmpDir = config.tmpDir + "/sql"
@@ -18,8 +19,6 @@ def main():
 	
 	# Create the tmp backup directories
 	checkDir(config.tmpDir)
-	checkDir(sqlTmpDir)
-	
 	
 	# Start off our log
 	logWrite("********** START OF LOG **********")
@@ -28,17 +27,28 @@ def main():
 	# Set the SQL Backup path, and dump the backup
 	logWrite("Creating database backup...")
 	sqlStatus = sql(sqlTmpDir, backupName)
-	logWrite(sqlStatus)
+	logWrite(sqlStatus['log'])
+	
+	# Process the filesystem backups
+	logWrite("Creating filesystem backup...")
+	fsStatus = fs(sqlTmpDir, sqlStatus['enabled'], backupName, config.tmpDir)
+	logWrite(fsStatus['log'])
 	
 	# Push file to backup destination
 	logWrite("Pushing backup to configured provider(s)...")
-	pushStatus = provider(backupType, "temp.tgz", "")
-	logWrite(pushStatus)
-
-	# Delete the DB Backup file.  Since this is added to the archive, no need to keep it if the archive
-	# copy fails.
-	logWrite("Deleting temporary backup files.")
-	os.remove(config.tmpDir)
+	pushStatus = provider(backupType, fsStatus['file'], config.tmpDir)
+	logWrite(pushStatus['log'])
+	
+	# If the backup push was successful, delete the tmp backup folder.
+	if pushStatus['status'] == True:
+		# Delete the DB Backup file.  Since this is added to the archive, no need to keep it if the archive
+		# copy fails.
+		logWrite("Deleting temporary backup files.")
+		shutil.rmtree(config.tmpDir)
+	else:
+		# remove the sql backup directory, since it's already in the archive, and add the failure to the log
+		shutil.rmtree(sqlTmpDir)
+		logWrite("There was an issue pushing the local backup.\n  Backup is located in " + config.tmpDir)
 	
 	logWrite("Backup process complete.")
 	logWrite("********** END OF LOG **********\n\n")
@@ -49,7 +59,6 @@ def currentTime():
 
 def logWrite(string):
 	log = open(config.logFile,"aw")
-		
 	log.write(currentTime() + ": " + string + "\n")
 	log.close()
 	return	
@@ -57,31 +66,6 @@ def logWrite(string):
 def checkDir(d):
 	if not os.path.exists(d):
 		os.makedirs(d)
-
-"""
-
-# Python's tarfile exclusion function
-def tarExclude(filename):
-	for item in backupExclude:
-		return filename == item
-
-# Add the sql backup to the backup source
-backupSrc.append(dbBackupFile)
-
-# Set the name and path for the temporary backup archive
-backupName = str(backupName) + ".tar.gz"
-backupFile = tmpPath + "/" + backupName
-
-# Create the tardump
-tar = tarfile.open(backupFile, "w:gz")
-
-logWrite("Archiving backup...")
-
-# Loops through the backup source array, and excludes any directories matching the exclude array
-for item in backupSrc:
-	tar.add(item,exclude=tarExclude)
-tar.close()
-"""
 
 if __name__ == "__main__":
 	main()
