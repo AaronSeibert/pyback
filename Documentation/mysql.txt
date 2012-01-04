@@ -1,0 +1,1 @@
+The mysql backup source requires python-mysqldb to be installed
