@@ -4,7 +4,7 @@
 logFile = "/var/log/backup"
 
 # Set the temporary file directory
-tmpDir = "/tmp"
+tmpDir = "/tmp/backup"
 
 # Set the number of backup files to keep for each backup type as an associative array
 maxFiles = {

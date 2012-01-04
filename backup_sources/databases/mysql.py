@@ -7,7 +7,9 @@ class sql:
 		self.db_user = db_user
 		self.db_pass = db_pass
 		self.db_host = db_host
+		self.log = "Creating a MySQL backup\n"
 
 	def obtainBackup(self, dbBackupFile):
+		self.log += "Connecting to database server\n"
 		os.popen("mysqldump -h " + self.db_host + " --user=\"" + self.db_user + "\" --password=\"" + self.db_pass + "\" --all-databases > " + dbBackupFile)
-		print "mysqldump -h " + self.db_host + " --user=\"" + self.db_user + "\" --password=\"" + self.db_pass + "\" --all-databases > " + dbBackupFile
+		self.log += "Database backup saved to " + dbBackupFile
