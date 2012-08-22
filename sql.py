@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import config
+import devconfig as config
 import os
 
 def processSql(sqlTmpDir, filename):
