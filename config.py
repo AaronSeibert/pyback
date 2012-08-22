@@ -13,6 +13,12 @@ maxFiles = {
 	'Monthly':6
 	}
 
+# Email notification settings
+fromEmail = ""
+toEmail = ""
+
+
+
 #########################################################################################
 #
 # The following sections allow you to configure the individual backup sources
