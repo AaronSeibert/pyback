@@ -2,7 +2,7 @@
 
 This backup script currently supports the following destinations:
 
-Rackspace Cloud
+Rackspace Cloud  
 Amazon S3
 
 
