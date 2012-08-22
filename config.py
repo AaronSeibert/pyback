@@ -51,8 +51,8 @@ sqlServers = [
 
 #########################################################################################
 #
-# The following sections allow you to configure the individual ackup destinations
-# Currently we have Rackspace CloadFiles
+# The following sections allow you to configure the individual backup destinations
+# 
 #
 #########################################################################################
 
@@ -60,3 +60,8 @@ sqlServers = [
 bpRackspace = True
 bpRackspaceUser = ""
 bpRackspaceAPI = ""
+
+# Configure the Amazon S3 backup destination
+bpAmazonS3 = True
+bpAWSKeyID = ""
+bpAWSKey=""
