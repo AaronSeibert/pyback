@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import devconfig as config
+import  config
 import traceback
 
 # Check for backup provider, and then process the backup

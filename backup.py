@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import sys
 import os
-import devconfig as config #for development.  Production should just use config
+import config #for development.  Production should just use config
 import shutil
 
 from datetime import date, datetime
