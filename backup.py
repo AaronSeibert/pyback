@@ -14,6 +14,7 @@ sqlTmpDir = config.tmpDir + "/sql"
 
 # Set the backup type
 backupType = sys.argv[1]
+email = ""
 
 def main():
 	
@@ -24,6 +25,7 @@ def main():
 	logWrite("********** START OF LOG **********")
 	logWrite("Backup process started.")
 	
+
 	# Set the SQL Backup path, and dump the backup
 	logWrite("Creating database backup...")
 	sqlStatus = sql(sqlTmpDir, backupName)
@@ -52,19 +54,42 @@ def main():
 		except:
 			logWrite("No tmp sql dir to remove")
 		logWrite("There was an issue pushing the local backup.\n  Backup is located in " + config.tmpDir)
-	
+
 	logWrite("Backup process complete.")
 	logWrite("********** END OF LOG **********\n\n")
+	sendEmail(backupType)
 	
 def currentTime():
 	time = datetime.now()
 	return str(time)
 
 def logWrite(string):
+	global email
 	log = open(config.logFile,"aw")
 	log.write(currentTime() + ": " + string + "\n")
+	email += currentTime() + ":" + string + "\n"
 	log.close()
 	return	
+
+def sendEmail(backupType):
+	import smtplib
+	import string
+	import platform
+	
+	FROM = config.fromEmail
+	TO = config.toEmail
+	SUBJECT = "Backup Complete: " + platform.node() + " " + backupType
+	BODY= string.join((
+					"From: %s" % FROM,
+					"To: %s" % TO,
+					"Subject: %s" %SUBJECT,
+					"",
+					email
+					), "\r\n")
+
+	s = smtplib.SMTP('localhost')
+	s.sendmail(FROM, TO, BODY)
+	s.quit()
 
 def checkDir(d):
 	if not os.path.exists(d):
