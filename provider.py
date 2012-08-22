@@ -9,6 +9,10 @@ def processProviders(backup_type, backup_name, backup_path):
 		import backup_providers.rackspace
 		Provider = backup_providers.rackspace.Rackspace(config.bpRackspaceUser, config.bpRackspaceAPI)
 		status = processBackup(Provider, backup_type, backup_name, backup_path, log)
+	elif config.bpRackspace == True:
+		import backup_providers.amazons3
+		Provider = backup_providers.amazons3.AmazonS3(config.bpAWSKeyID, config.bpAWSKey)
+		status = processBackup(Provider, backup_type, backup_name, backup_path, log)
 	else:
 		# If there are no valid backup destinations, raise exception
 		raise Exception("No valid backup destination providers.")

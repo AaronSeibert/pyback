@@ -1,6 +1,9 @@
 # PyBack - A Python backup tool
 
-This backup script, at the moment, only backs up to Rackspace Cloud.
+This backup script currently supports the following destinations:
+
+Rackspace Cloud
+Amazon S3
 
 
 ## Usage
