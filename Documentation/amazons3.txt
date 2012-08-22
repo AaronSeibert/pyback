@@ -1,0 +1,8 @@
+Amazon S3 Backup Provider requirements
+======================================
+
+Amazon S3 requires the boto python library.
+
+To install boto, use the following command:
+
+pip install -U boto
