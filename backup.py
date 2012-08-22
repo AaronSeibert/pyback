@@ -47,7 +47,10 @@ def main():
 		shutil.rmtree(config.tmpDir)
 	else:
 		# remove the sql backup directory, since it's already in the archive, and add the failure to the log
-		shutil.rmtree(sqlTmpDir)
+		try:
+			shutil.rmtree(sqlTmpDir)
+		except:
+			logWrite("No tmp sql dir to remove")
 		logWrite("There was an issue pushing the local backup.\n  Backup is located in " + config.tmpDir)
 	
 	logWrite("Backup process complete.")

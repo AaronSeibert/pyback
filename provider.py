@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
-import config
+import devconfig as config
+import traceback
 
 # Check for backup provider, and then process the backup
 def processProviders(backup_type, backup_name, backup_path):
@@ -9,7 +10,7 @@ def processProviders(backup_type, backup_name, backup_path):
 		import backup_providers.rackspace
 		Provider = backup_providers.rackspace.Rackspace(config.bpRackspaceUser, config.bpRackspaceAPI)
 		status = processBackup(Provider, backup_type, backup_name, backup_path, log)
-	elif config.bpRackspace == True:
+	elif config.bpAmazonS3 == True:
 		import backup_providers.amazons3
 		Provider = backup_providers.amazons3.AmazonS3(config.bpAWSKeyID, config.bpAWSKey)
 		status = processBackup(Provider, backup_type, backup_name, backup_path, log)

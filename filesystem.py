@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import config
+import devconfig as config
 
 def processFS(sqlBackup, sqlStatus, backupName, tmpPath):
     log = "Processing filesystem backup sources.\n"
