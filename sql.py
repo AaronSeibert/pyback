@@ -3,8 +3,9 @@
 import config
 import os
 
-def processSql(sqlTmpDir, filename):
+def processSql(sqlDatabase, sqlTmpDir, filename):
 	log = "Processing sql sources\n"
+	
 	# First, let's make sure we're actually using the sql database source flag in config
 	if config.sqlBackup == True:
 		# If the SQL temp backup location doesn't exist, create it.
