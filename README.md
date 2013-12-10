@@ -7,7 +7,7 @@ Amazon S3
 
 
 ## Usage
-First, modify config.py to match your environment and backup demands.
+First, copy config.py.backup to config.py and modify to match your environment and backup demands.
 Then, check the Documentation folder for requirements pertaining to each of the providers you choose to use (ie, rackspace.txt, mysql.txt, etc.)
 
 Then, simply call backup.py with the type of backup to perform:

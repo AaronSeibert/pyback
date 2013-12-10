@@ -2,3 +2,4 @@
 .pydevproject
 devconfig.py
 *.pyc
+/config.py
