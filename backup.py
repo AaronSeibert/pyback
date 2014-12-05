@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import sys
 import os
-import config #for development.  Production should just use config
+
 import shutil
 import argparse
 
@@ -9,9 +9,6 @@ from datetime import date, datetime
 from provider import processProviders as provider
 from sql import processSql as sql
 from filesystem import processFS as fs
-
-backupName = str(date.today());
-sqlTmpDir = config.tmpDir + "/sql"
 
 # argument parser
 
@@ -22,11 +19,27 @@ parser.add_argument('-c', '--client',
 				   help='Optional.  Name of the client to process an individual backup for.')
 parser.add_argument('-p', '--path', 
 				   help='Optional.  Filesystem path for a single folder backup')
+
+parser.add_argument('-d', '--dev', help='Optional. Enables test mode for development', action="store_true")
+
 # parser.add_argument('-d', '--database', help='Optional.  Database name for a single database backup')
 
-
-
 args = parser.parse_args()
+
+global test
+
+if args.dev:
+        test = True
+else:
+        test = False
+
+if test:        
+        import devconfig as config #for development.  Production should just use config
+else:
+        import config
+        
+backupName = str(date.today());
+sqlTmpDir = config.tmpDir + "/sql"
 
 # Set the backup type
 backupType = args.backupType
@@ -74,7 +87,7 @@ def main():
 
 	logWrite("Backup process complete.")
 	logWrite("********** END OF LOG **********\n\n")
-	sendEmail(backupType)
+	#sendEmail(backupType)
 	
 def currentTime():
 	time = datetime.now()

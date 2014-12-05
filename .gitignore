@@ -1,5 +1,6 @@
 .project
 .pydevproject
+*.kateproject
 devconfig.py
 *.pyc
-/config.py
+config.py

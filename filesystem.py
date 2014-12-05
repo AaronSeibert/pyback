@@ -1,4 +1,5 @@
 #!/usr/bin/python
+
 import config
 
 def processFS(sqlBackup, sqlStatus, backupName, tmpPath):

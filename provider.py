@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
-import  config
+import config
+       
 import traceback
 
 # Check for backup provider, and then process the backup
@@ -40,9 +41,10 @@ def processBackup(Provider, backup_type, backup_name, backup_path, log):
 			'log':log,
 			'status':True
 		}
-	except:
+	except Exception, e:
+	        print e
 		return {
-			'log':log,
+			'log': e,
 			'status':False
 			}
 
