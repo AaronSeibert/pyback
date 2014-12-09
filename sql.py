@@ -1,10 +1,16 @@
 #!/usr/bin/python
 
 import config
+<<<<<<< HEAD
         
 import os
 
 def processSql(sqlTmpDir, filename):
+=======
+import os
+
+def processSql(sqlDatabase, sqlTmpDir, filename):
+>>>>>>> 5b29aac12466425617c53ee7ce11f67e132c3a6c
 	log = "Processing sql sources\n"
 	
 	# First, let's make sure we're actually using the sql database source flag in config

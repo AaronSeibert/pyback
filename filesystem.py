@@ -32,7 +32,3 @@ def processFS(sqlBackup, sqlStatus, backupName, tmpPath):
 def processBackup(fs, backupName, tmpPath):
     fs.setPaths(backupName, tmpPath)
     return fs.processBackup()
-
-        
-                
-            

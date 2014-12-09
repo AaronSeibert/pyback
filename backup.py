@@ -1,6 +1,9 @@
 #!/usr/bin/python
 import sys
 import os
+import config #for development.  Production should just use config
+import shutil
+import argparse
 
 import shutil
 import argparse
@@ -9,6 +12,7 @@ from datetime import date, datetime
 from provider import processProviders as provider
 from sql import processSql as sql
 from filesystem import processFS as fs
+<<<<<<< HEAD
 
 # argument parser
 
@@ -56,6 +60,42 @@ def main():
 	logWrite("Backup process started.")
 	
 
+=======
+
+backupName = str(date.today());
+sqlTmpDir = config.tmpDir + "/sql"
+
+# argument parser
+
+parser = argparse.ArgumentParser(description='Create rotating backups')
+parser.add_argument('backupType', metavar='TYPE', type=str,
+                   help='The type of backup to perform - Daily, Weekly, or Monthly')
+parser.add_argument('-c', '--client', 
+				   help='Optional.  Name of the client to process an individual backup for.')
+parser.add_argument('-p', '--path', 
+				   help='Optional.  Filesystem path for a single folder backup')
+# parser.add_argument('-d', '--database', help='Optional.  Database name for a single database backup')
+
+
+
+args = parser.parse_args()
+
+# Set the backup type
+backupType = args.backupType
+
+email = ""
+
+def main():
+	
+	# Create the tmp backup directories
+	checkDir(config.tmpDir)
+	
+	# Start off our log
+	logWrite("********** START OF LOG **********")
+	logWrite("Backup process started.")
+	
+
+>>>>>>> 5b29aac12466425617c53ee7ce11f67e132c3a6c
 	# Set the SQL Backup path, and dump the backup
 	logWrite("Creating database backup...")
 	sqlStatus = sql(sqlTmpDir, backupName)
@@ -87,7 +127,11 @@ def main():
 
 	logWrite("Backup process complete.")
 	logWrite("********** END OF LOG **********\n\n")
+<<<<<<< HEAD
 	#sendEmail(backupType)
+=======
+	sendEmail(backupType)
+>>>>>>> 5b29aac12466425617c53ee7ce11f67e132c3a6c
 	
 def currentTime():
 	time = datetime.now()

@@ -29,9 +29,14 @@ class AmazonS3:
 			key.set_contents_from_filename(backup_file)
 			key.set_acl=('private')
 			return "Ok"
+<<<<<<< HEAD
 		except Exception, e:
 			self.log += "There was an error creating the remote backup:\n\n"
 			self.log += e
+=======
+		except:
+			self.log += "There was an error creating the remote backup.\n"
+>>>>>>> 5b29aac12466425617c53ee7ce11f67e132c3a6c
 			self.log += "Backup file is located at " + backup_file + "\n"
 			self.log += "Please move the backup manually\n"
 			return "Error"
