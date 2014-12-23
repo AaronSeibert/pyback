@@ -43,6 +43,7 @@ def processBackup(Provider, backup_type, backup_name, backup_path, log):
 		}
 
 	except:
+		log += str(traceback.format_exc()) + "\n"
 		return {
 			'log':log,
 			'status':False

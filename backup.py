@@ -118,6 +118,7 @@ def main():
 		except:
 			logWrite("No tmp sql dir to remove")
 		logWrite("There was an issue pushing the local backup.\n  Backup is located in " + config.tmpDir)
+		logWrite(pushStatus['log'])
 
 	logWrite("Backup process complete.")
 	logWrite("********** END OF LOG **********\n\n")
