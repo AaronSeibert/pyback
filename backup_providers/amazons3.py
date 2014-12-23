@@ -138,7 +138,7 @@ class AmazonS3:
 		
 			# Upload the backup file to remote storage
 			mb_size = os.path.getsize(backup_file) / 1e6
-			self.log += "File size:" + mb_size+ "Mb"
+			self.log += "File size:" + str(mb_size) + "Mb"
 			if mb_size < 60:
 			        self.log += "Using standard upload method"
 				self._standard_transfer(self.bucket, key, backup_file, False)
