@@ -87,6 +87,24 @@ class AmazonS3:
 		with open(part) as t_handle:
 			mp.upload_part_from_file(t_handle, i+1)
 		os.remove(part)
+	
+	@contextlib.contextmanager
+	def multimap(cores=None):
+		"""Provide multiprocessing imap like function.
+
+		The context manager handles setting up the pool, worked around interrupt issues
+		and terminating the pool on completion.
+		"""
+		if cores is None:
+		    cores = max(multiprocessing.cpu_count() - 1, 1)
+		def wrapper(func):
+		    def wrap(self, timeout=None):
+			return func(self, timeout=timeout if timeout is not None else 1e100)
+		    return wrap
+		IMapIterator.next = wrapper(IMapIterator.next)
+		pool = multiprocessing.Pool(cores)
+		yield pool.imap
+		pool.terminate()
 
 	def _multipart_upload(instance, bucket, s3_key_name, tarball, mb_size, use_rr=True):
 		"""Upload large files using Amazon's multipart upload functionality.
@@ -108,24 +126,6 @@ class AmazonS3:
 						      enumerate(split_file(tarball, mb_size, cores)))):
 			    pass
 		mp.complete_upload()
-
-	@contextlib.contextmanager
-	def multimap(cores=None):
-		"""Provide multiprocessing imap like function.
-
-		The context manager handles setting up the pool, worked around interrupt issues
-		and terminating the pool on completion.
-		"""
-		if cores is None:
-		    cores = max(multiprocessing.cpu_count() - 1, 1)
-		def wrapper(func):
-		    def wrap(self, timeout=None):
-			return func(self, timeout=timeout if timeout is not None else 1e100)
-		    return wrap
-		IMapIterator.next = wrapper(IMapIterator.next)
-		pool = multiprocessing.Pool(cores)
-		yield pool.imap
-		pool.terminate()
 		
 	def pushBackup(self, backup_name, backup_file):
 		backup_file += "/" + backup_name
