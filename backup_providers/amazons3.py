@@ -79,7 +79,7 @@ class AmazonS3:
 		return mp
 
 	@map_wrap
-	def transfer_part(mp_id, mp_keyname, mp_bucketname, i, part):
+	def transfer_part(instance, mp_id, mp_keyname, mp_bucketname, i, part):
 		"""Transfer a part of a multipart upload. Designed to be run in parallel.
 		"""
 		mp = mp_from_ids(mp_id, mp_keyname, mp_bucketname)
@@ -88,7 +88,7 @@ class AmazonS3:
 			mp.upload_part_from_file(t_handle, i+1)
 		os.remove(part)
 
-	def _multipart_upload(bucket, s3_key_name, tarball, mb_size, use_rr=True):
+	def _multipart_upload(instance, bucket, s3_key_name, tarball, mb_size, use_rr=True):
 		"""Upload large files using Amazon's multipart upload functionality.
 		"""
 		cores = multiprocessing.cpu_count()
@@ -138,18 +138,18 @@ class AmazonS3:
 		
 			# Upload the backup file to remote storage
 			mb_size = os.path.getsize(backup_file) / 1e6
-			self.log += "File size:" + str(mb_size) + "Mb"
+			self.log += "File size:" + str(mb_size) + "Mb\n"
 			if mb_size < 60:
-			        self.log += "Using standard upload method"
+			        self.log += "Using standard upload method\n"
 				self._standard_transfer(self.bucket, key, backup_file, False)
 			else:
-			        self.log += "Using multipart upload"
+			        self.log += "Using multipart upload\n"
 				self._multipart_upload(self.bucket, key, backup_file, mb_size, False)
 			key.set_acl=('private')
 			return "Ok"
 		except Exception, e:
 			self.log += "There was an error creating the remote backup.\n"
-			self.log += str(e)
+			self.log += str(e) + "\n"
 			self.log += "Backup file is located at " + backup_file + "\n"
 			self.log += "Please move the backup manually\n"
 			return "Error"
