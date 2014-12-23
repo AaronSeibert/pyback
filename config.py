@@ -14,8 +14,8 @@ maxFiles = {
 	}
 
 # Email notification settings
-fromEmail = ""
-toEmail = ""
+fromEmail = "backups@deimos"
+toEmail = "aaron@awseibert.net"
 
 
 
@@ -34,11 +34,9 @@ toEmail = ""
 fsBackup = True
 fsType = "gzip"
 fsBackupSrc = [
-	"/home",
-	"/etc"
+	"/home/aaron.seibert/Downloads"
 	]
 fsBackupExclude = [
-	"/home/aaron"
 	]
 
 # sqlBackup - choose to enable (True) or disable (False) the sql backup
@@ -52,7 +50,7 @@ fsBackupExclude = [
 # dbMysqlHost - host of the MySQL server.
 sqlBackup = True
 sqlServers = [
-	["backend","user","pass","host"],
+	#"backend","user","pass","host"],
 	]
 
 #########################################################################################
@@ -63,11 +61,11 @@ sqlServers = [
 #########################################################################################
 
 # Configure the Rackspace backup destination
-bpRackspace = True
+bpRackspace = False
 bpRackspaceUser = ""
 bpRackspaceAPI = ""
 
 # Configure the Amazon S3 backup destination
 bpAmazonS3 = True
-bpAWSKeyID = ""
-bpAWSKey=""
+bpAWSKeyID = "AKIAI53XPCVFJ5ISSWLQ"
+bpAWSKey="7cTJS0agVmWMSWSuYLBzLJTcyV5AZyiYhV4LMyDN"

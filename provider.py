@@ -1,11 +1,6 @@
 #!/usr/bin/python
 
-<<<<<<< HEAD
 import config
-       
-=======
-import  config
->>>>>>> 5b29aac12466425617c53ee7ce11f67e132c3a6c
 import traceback
 
 # Check for backup provider, and then process the backup
@@ -46,16 +41,10 @@ def processBackup(Provider, backup_type, backup_name, backup_path, log):
 			'log':log,
 			'status':True
 		}
-<<<<<<< HEAD
-	except Exception, e:
-	        print e
-		return {
-			'log': e,
-=======
+
 	except:
 		return {
 			'log':log,
->>>>>>> 5b29aac12466425617c53ee7ce11f67e132c3a6c
 			'status':False
 			}
 
