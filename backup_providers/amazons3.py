@@ -149,7 +149,7 @@ class AmazonS3:
 			return "Ok"
 		except Exception, e:
 			self.log += "There was an error creating the remote backup.\n"
-			self.log += str(e) + "\n"
+			self.log += str(traceback.format_exc()) + "\n"
 			self.log += "Backup file is located at " + backup_file + "\n"
 			self.log += "Please move the backup manually\n"
 			return "Error"
