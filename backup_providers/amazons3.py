@@ -133,7 +133,7 @@ class AmazonS3:
 			# Create the backup name to work with the RS Cloud pseudo-directory
 			self.backup_name = self.backup_type + "/" + backup_name
 		
-			self.log += "Creating object for backup file\n"
+			self.log += "Creating object for backup file: " + self.backup_name + "\n"
 			key = self.bucket.new_key(self.backup_name)
 		
 			# Upload the backup file to remote storage
