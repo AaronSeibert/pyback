@@ -72,8 +72,8 @@ class AmazonS3:
 		This allows us to reconstitute a connection to the upload
 		from within multiprocessing functions.
 		"""
-		conn = boto.connect_s3()
-		bucket = conn.lookup(mp_bucketname)
+		conn = self.conn
+		bucket = self.bucket
 		mp = boto.s3.multipart.MultiPartUpload(bucket)
 		mp.key_name = mp_keyname
 		mp.id = mp_id
