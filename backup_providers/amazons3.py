@@ -113,13 +113,13 @@ class AmazonS3:
 		cores = multiprocessing.cpu_count()
 		def split_file(in_file, mb_size, split_num=5):
 			prefix = os.path.join(os.path.dirname(in_file),
-					      "%sS3PART" % (os.path.basename(self.keyname)))
+					      "%sS3PART" % (os.path.basename(tarball)))
 			split_size = int(min(mb_size / (split_num * 2.0), 250))
 			if not os.path.exists("%saa" % prefix):
 				cl = ["split", "-b%sm" % split_size, in_file, prefix]
 				subprocess.check_call(cl)
 			return sorted(glob.glob("%s*" % prefix))
-		mp = self.bucket.initiate_multipart_upload(self.keyname, reduced_redundancy=use_rr)
+		mp = self.bucket.initiate_multipart_upload(tarball, reduced_redundancy=use_rr)
 		with self.multimap(cores) as pmap:
 			for _ in pmap(self.transfer_part, ((mp.id, mp.key_name, mp.bucket_name, i, part)
 						      for (i, part) in
