@@ -8,6 +8,7 @@ import contextlib
 import functools
 import multiprocessing
 import boto
+import traceback
 from multiprocessing.pool import IMapIterator
 
 class AmazonS3:
@@ -53,7 +54,7 @@ class AmazonS3:
 		sys.stdout.flush()
 
 	def _standard_transfer(bucket, s3_key_name, transfer_file, use_rr):
-		print " Upload with standard transfer, not multipart",
+		print " Upload with standard transfer, not multipart."
 		new_s3_item = bucket.new_key(s3_key_name)
 		new_s3_item.set_contents_from_filename(transfer_file, reduced_redundancy=use_rr,
 						      cb=upload_cb, num_cb=10)
