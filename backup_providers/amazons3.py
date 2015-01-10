@@ -107,7 +107,7 @@ class AmazonS3:
 		yield pool.imap
 		pool.terminate()
 
-	def _multipart_upload(self, instance, bucket, s3_key_name, tarball, mb_size, use_rr=True):
+	def _multipart_upload(self, s3_key_name, tarball, mb_size, use_rr=True):
 		"""Upload large files using Amazon's multipart upload functionality.
 		"""
 		cores = multiprocessing.cpu_count()
@@ -119,8 +119,8 @@ class AmazonS3:
 				cl = ["split", "-b%sm" % split_size, in_file, prefix]
 				subprocess.check_call(cl)
 			return sorted(glob.glob("%s*" % prefix))
-
-		mp = bucket.initiate_multipart_upload(s3_key_name, reduced_redundancy=use_rr)
+                self.log += __repre__(self.bucket)
+		mp = self.bucket.initiate_multipart_upload(s3_key_name, reduced_redundancy=use_rr)
 		with self.multimap(cores) as pmap:
 			for _ in pmap(transfer_part, ((mp.id, mp.key_name, mp.bucket_name, i, part)
 						      for (i, part) in
@@ -145,7 +145,7 @@ class AmazonS3:
 				self._standard_transfer(self.bucket, key, backup_file, False)
 			else:
 			        self.log += "Using multipart upload\n"
-				self._multipart_upload(self.bucket, key, backup_file, mb_size, False)
+				self._multipart_upload(key, backup_file, mb_size, False)
 			key.set_acl=('private')
 			return "Ok"
 		except Exception, e:
