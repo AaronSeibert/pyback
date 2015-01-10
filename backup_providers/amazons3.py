@@ -53,9 +53,9 @@ class AmazonS3:
 		sys.stdout.write(".")
 		sys.stdout.flush()
 
-	def _standard_transfer(self, bucket, s3_key_name, transfer_file, use_rr):
+	def _standard_transfer(self, transfer_file, use_rr):
 		print " Upload with standard transfer, not multipart."
-		new_s3_item = bucket.new_key(s3_key_name)
+		new_s3_item = self.bucket.new_key(self.keyname)
 		new_s3_item.set_contents_from_filename(transfer_file, reduced_redundancy=use_rr,
 						      cb=upload_cb, num_cb=10)
 		print
@@ -107,19 +107,19 @@ class AmazonS3:
 		yield pool.imap
 		pool.terminate()
 
-	def _multipart_upload(self, s3_key_name, tarball, mb_size, use_rr=True):
+	def _multipart_upload(self, tarball, mb_size, use_rr=True):
 		"""Upload large files using Amazon's multipart upload functionality.
 		"""
 		cores = multiprocessing.cpu_count()
 		def split_file(in_file, mb_size, split_num=5):
 			prefix = os.path.join(os.path.dirname(in_file),
-					      "%sS3PART" % (os.path.basename(s3_key_name)))
+					      "%sS3PART" % (os.path.basename(self.keyname)))
 			split_size = int(min(mb_size / (split_num * 2.0), 250))
 			if not os.path.exists("%saa" % prefix):
 				cl = ["split", "-b%sm" % split_size, in_file, prefix]
 				subprocess.check_call(cl)
 			return sorted(glob.glob("%s*" % prefix))
-		mp = self.bucket.initiate_multipart_upload(s3_key_name, reduced_redundancy=use_rr)
+		mp = self.bucket.initiate_multipart_upload(self.key, reduced_redundancy=use_rr)
 		with self.multimap(cores) as pmap:
 			for _ in pmap(self.transfer_part, ((mp.id, mp.key_name, mp.bucket_name, i, part)
 						      for (i, part) in
@@ -134,18 +134,18 @@ class AmazonS3:
 			self.backup_name = self.backup_type + "/" + backup_name
 		
 			self.log += "Creating object for backup file: " + self.backup_name + "\n"
-			key = self.bucket.new_key(self.backup_name)
+			self.keyname = self.bucket.new_key(self.backup_name)
 		
 			# Upload the backup file to remote storage
 			mb_size = os.path.getsize(backup_file) / 1e6
 			self.log += "File size:" + str(mb_size) + "Mb\n"
 			if mb_size < 60:
 			        self.log += "Using standard upload method\n"
-				self._standard_transfer(self.bucket, key, backup_file, False)
+				self._standard_transfer(backup_file, False)
 			else:
 			        self.log += "Using multipart upload\n"
-				self._multipart_upload(key, backup_file, mb_size, False)
-			key.set_acl=('private')
+				self._multipart_upload(backup_file, mb_size, False)
+			self.key.set_acl=('private')
 			return "Ok"
 		except Exception, e:
 			self.log += "There was an error creating the remote backup.\n"
