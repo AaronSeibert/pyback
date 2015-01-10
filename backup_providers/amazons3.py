@@ -49,24 +49,24 @@ class AmazonS3:
 				
 				currentBackups -= 1
 				
-	def upload_cb(complete, total):
+	def upload_cb(self, complete, total):
 		sys.stdout.write(".")
 		sys.stdout.flush()
 
-	def _standard_transfer(bucket, s3_key_name, transfer_file, use_rr):
+	def _standard_transfer(self, bucket, s3_key_name, transfer_file, use_rr):
 		print " Upload with standard transfer, not multipart."
 		new_s3_item = bucket.new_key(s3_key_name)
 		new_s3_item.set_contents_from_filename(transfer_file, reduced_redundancy=use_rr,
 						      cb=upload_cb, num_cb=10)
 		print
 
-	def map_wrap(f):
+	def map_wrap(self, f):
 		@functools.wraps(f)
 		def wrapper(*args, **kwargs):
 			return apply(f, *args, **kwargs)
 		return wrapper
 
-	def mp_from_ids(mp_id, mp_keyname, mp_bucketname):
+	def mp_from_ids(self, mp_id, mp_keyname, mp_bucketname):
 		"""Get the multipart upload from the bucket and multipart IDs.
 
 		This allows us to reconstitute a connection to the upload
@@ -80,7 +80,7 @@ class AmazonS3:
 		return mp
 
 	@map_wrap
-	def transfer_part(instance, mp_id, mp_keyname, mp_bucketname, i, part):
+	def transfer_part(self, instance, mp_id, mp_keyname, mp_bucketname, i, part):
 		"""Transfer a part of a multipart upload. Designed to be run in parallel.
 		"""
 		mp = mp_from_ids(mp_id, mp_keyname, mp_bucketname)
@@ -90,7 +90,7 @@ class AmazonS3:
 		os.remove(part)
 	
 	@contextlib.contextmanager
-	def multimap(cores=None):
+	def multimap(self, cores=None):
 		"""Provide multiprocessing imap like function.
 
 		The context manager handles setting up the pool, worked around interrupt issues
@@ -107,7 +107,7 @@ class AmazonS3:
 		yield pool.imap
 		pool.terminate()
 
-	def _multipart_upload(instance, bucket, s3_key_name, tarball, mb_size, use_rr=True):
+	def _multipart_upload(self, instance, bucket, s3_key_name, tarball, mb_size, use_rr=True):
 		"""Upload large files using Amazon's multipart upload functionality.
 		"""
 		cores = multiprocessing.cpu_count()
