@@ -7,7 +7,6 @@ import subprocess
 import contextlib
 import functools
 import multiprocessing
-import multimap
 import boto
 import traceback
 from multiprocessing.pool import IMapIterator
@@ -122,7 +121,7 @@ class AmazonS3:
 			return sorted(glob.glob("%s*" % prefix))
 
 		mp = bucket.initiate_multipart_upload(s3_key_name, reduced_redundancy=use_rr)
-		with multimap(cores) as pmap:
+		with self.multimap(cores) as pmap:
 			for _ in pmap(transfer_part, ((mp.id, mp.key_name, mp.bucket_name, i, part)
 						      for (i, part) in
 						      enumerate(split_file(tarball, mb_size, cores)))):
