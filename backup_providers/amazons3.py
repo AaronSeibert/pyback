@@ -119,7 +119,7 @@ class AmazonS3:
 				cl = ["split", "-b%sm" % split_size, in_file, prefix]
 				subprocess.check_call(cl)
 			return sorted(glob.glob("%s*" % prefix))
-		mp = self.bucket.initiate_multipart_upload(self.key, reduced_redundancy=use_rr)
+		mp = self.bucket.initiate_multipart_upload(self.keyname, reduced_redundancy=use_rr)
 		with self.multimap(cores) as pmap:
 			for _ in pmap(self.transfer_part, ((mp.id, mp.key_name, mp.bucket_name, i, part)
 						      for (i, part) in
