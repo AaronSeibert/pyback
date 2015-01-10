@@ -60,7 +60,7 @@ class AmazonS3:
 						      cb=upload_cb, num_cb=10)
 		print
 
-	def map_wrap(self, f):
+	def map_wrap(f):
 		@functools.wraps(f)
 		def wrapper(*args, **kwargs):
 			return apply(f, *args, **kwargs)
