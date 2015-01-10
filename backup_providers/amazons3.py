@@ -7,6 +7,7 @@ import subprocess
 import contextlib
 import functools
 import multiprocessing
+import multimap
 import boto
 import traceback
 from multiprocessing.pool import IMapIterator
