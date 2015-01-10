@@ -120,7 +120,7 @@ class AmazonS3:
 				subprocess.check_call(cl)
 			return sorted(glob.glob("%s*" % prefix))
 
-		mp = bucket.initiate_multipart_upload(s3_key_name, reduced_redundancy=use_rr)
+		mp = initiate_multipart_upload(bucket, s3_key_name, reduced_redundancy=use_rr)
 		with self.multimap(cores) as pmap:
 			for _ in pmap(transfer_part, ((mp.id, mp.key_name, mp.bucket_name, i, part)
 						      for (i, part) in
