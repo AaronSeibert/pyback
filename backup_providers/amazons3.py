@@ -117,7 +117,12 @@ class AmazonS3:
 			split_size = int(min(mb_size / (split_num * 2.0), 250))
 			if not os.path.exists("%saa" % prefix):
 				cl = ["split", "-b%sm" % split_size, in_file, prefix]
-				subprocess.check_call(cl)
+                                try:
+                                    subprocess.check_call(cl)
+                                except subprocess.CalledProcessError as e:
+                                    self.log += "There was an issue splitting the file.\n "
+                                    self.log += e.output + "\n"
+                                    print e.output
 			return sorted(glob.glob("%s*" % prefix))
 		mp = self.bucket.initiate_multipart_upload(tarball, reduced_redundancy=use_rr)
 		with self.multimap(cores) as pmap:
