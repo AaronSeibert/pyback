@@ -6,7 +6,9 @@ import glob
 import subprocess
 import contextlib
 import functools
-import multiprocessing
+#import multiprocessing
+import dill
+from pathos.multiprocessing import ProcessingPool
 import boto
 import traceback
 from multiprocessing.pool import IMapIterator
@@ -103,7 +105,7 @@ class AmazonS3:
 			return func(self, timeout=timeout if timeout is not None else 1e100)
 		    return wrap
 		IMapIterator.next = wrapper(IMapIterator.next)
-		pool = multiprocessing.Pool(cores)
+		pool = ProcessingPool(cores)
 		yield pool.imap
 		pool.terminate()
 
